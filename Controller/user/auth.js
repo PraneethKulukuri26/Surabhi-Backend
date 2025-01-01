@@ -1,0 +1,35 @@
+const logic=require("../../JS/authLogics");
+const emailServices=require("../../JS/mailWorks");
+
+async function sendOtpRegistration(req,res) {
+  const {email}=req.body;
+
+  if(!email){
+    return res.status(400).json({code:"-1",message:"Email is required."});
+  }
+  
+  logic.checkUserPresence(email)
+  .then(async (check)=>{
+    if(check==true){
+      return res.status(200).json({code:0,message:"Email all ready exist."});
+    }
+
+    try{
+      const sent=await emailServices.sendOtp(email);
+      if(sent){
+        return res.json({code:1,message:"OTP sent."});
+      }
+
+      throw new Error("Could not send mail.");
+    }catch(err){
+      return res.json({code:0,message:err});
+    }
+
+  }).catch(err=>{
+    return res.status(500).json({code:-1,message:err.message});
+  });
+}
+
+module.exports={
+  sendOtpRegistration,
+}

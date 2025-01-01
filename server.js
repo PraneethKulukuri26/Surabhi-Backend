@@ -24,3 +24,5 @@ app.listen(port,()=>{
   console.log("Running");
 });
 
+const userAuth=require("./Route/user/auth");
+app.use("/api/user/",userAuth);
