@@ -1,4 +1,4 @@
-export const MAIL=process.env.NODE_MAIL;
+const MAIL=process.env.NODE_MAIL;
 const PASSWORD=process.env.NODE_PASSWORD;
 const HOST=process.env.NODE_HOST;
 const PORT=process.env.NODE_PORT;
@@ -18,4 +18,15 @@ const transporter=nodemailer.createTransport({
   },
 });
 
-module.exports=transporter;
+transporter.verify((err, success) => {
+  if (err) {
+    console.error("Transporter verification failed:", err.message || err);
+  } else {
+    console.log("Transporter is ready to send emails.");
+  }
+});
+
+module.exports={
+  MAIL,
+  transporter,
+};
