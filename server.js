@@ -5,6 +5,7 @@ const cors=require("cors");
 const compression=require("compression");
 const fileUpload=require("express-fileupload");
 const helmet=require("helmet");
+const uuid=require("uuid");
 
 dotenv.config();
 
@@ -26,3 +27,11 @@ app.listen(port,()=>{
 
 const userAuth=require("./Route/user/auth");
 app.use("/api/user/",userAuth);
+
+app.get("/test",(req,res)=>{
+  for(let i=0;i<10;i++){
+
+    console.log(uuid.v1());
+  }
+  res.sendStatus(200);  
+});

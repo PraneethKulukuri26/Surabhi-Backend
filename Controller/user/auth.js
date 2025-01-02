@@ -38,7 +38,9 @@ async function VerifyOtp(req,res) {
       const verifed=await logic.verifyOtp(email,otp);
 
       if(verifed){
-        return res.json({code:1,message:"Email Verifed."});
+        const token=await logic.storeToken(email);
+
+        return res.json({code:1,message:"Email Verified.",token:token,tokenMessage:"Valid for 30 minutes."});
       }
 
       return res.json({code:0,message:"Incorrect OTP."});

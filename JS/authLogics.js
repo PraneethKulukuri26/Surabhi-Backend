@@ -1,4 +1,5 @@
 const database=require("../Config/database");
+const uuid=require("uuid");
 
 async function checkUserPresence(email) {
 
@@ -91,9 +92,26 @@ async function verifyOtp(email,otp) {
   }
 }
 
+async function storeToken(email) {
+  const token=uuid.v4();
+  const conn=await database.getConnection();
+
+  try{
+    const query="insert into registerToken (token,email) values(?,?)";
+    await conn.query(query,[email,token]);
+
+    return token;
+  }catch(err){
+    throw new Error("Internal Server Error.");
+  }finally{
+    conn.release();
+  }
+}
+
 module.exports={
   checkUserPresence,
   saveOTP,
   deleteOtp,
-  verifyOtp
+  verifyOtp,
+  storeToken,
 }
