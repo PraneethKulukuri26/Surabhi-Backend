@@ -11,7 +11,7 @@ const connection = mysql.createPool({
 connection
   .getConnection()
   .then((connection) => {
-    console.log("Connection ID:",connection.threadId);
+    console.log("Database connected:",connection.threadId);
     connection.release();
   })
   .catch((error) => {

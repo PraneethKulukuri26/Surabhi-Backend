@@ -8,14 +8,14 @@ async function sendOtp(email) {
 
   try {
     await authLogics.saveOTP(email, otp);
-    
+
     const templatePath = path.join(__dirname, "../Templates/otpTemplate.html");
     if (!fs.existsSync(templatePath)) {
       throw new Error(`Template not found at path: ${templatePath}`);
     }
 
     let htmlContent = fs.readFileSync(templatePath, "utf8");
-    htmlContent = htmlContent.replace("{{otp}}", otp);
+    htmlContent = htmlContent.replace("[OTP]", otp);
 
     const mailOptions = {
       from: transporter.MAIL,

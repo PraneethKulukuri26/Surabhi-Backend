@@ -1,24 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OTP Email</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    .otp {
-      font-size: 20px;
-      font-weight: bold;
-      color: #333;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KL SURABHI 2025: Verify Your Registration</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .email-container {
+            width: 90%;
+            max-width: 600px;
+            background-color: #fff4e2;
+            border: 1px solid #d6b587;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 20px;
+            text-align: center;
+        }
+        .header {
+            font-size: 22px;
+            font-weight: bold;
+            color: #2a4d6e;
+            margin-bottom: 16px;
+        }
+        .input-container {
+            background-color: #fff;
+            border: 1px solid #cd8f53;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 20px auto;
+            font-size: 18px;
+            color: #333;
+            width: 80%;
+            word-wrap: break-word;
+        }
+        .button {
+            background-color: #f1e2bd;
+            color: #333;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .button:hover {
+            background-color: #d1c1a0;
+        }
+        .sub-text {
+            font-size: 14px;
+            color: #555;
+            margin-top: 10px;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+            text-align: center;
+        }
+        .footer a {
+            color: #cd8f53;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .regards {
+            margin-top: 20px;
+            font-size: 16px;
+            font-style: italic;
+            color: #333;
+            font-family: 'Courier New', Courier, monospace; /* Changed font style */
+        }
+        .address {
+            font-size: 14px;
+            color: #555;
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+        
+        /* Countdown timer */
+        .timer {
+            font-size: 20px;
+            font-weight: bold;
+            color: #cd8f53;
+            background-color: #fff;
+            border: 1px solid #cd8f53;
+            border-radius: 8px;
+            padding: 8px 12px;
+            display: inline-block;
+        }
+
+        /* Animation for countdown */
+        .timer {
+            animation: countdown 360s linear infinite; /* 6 minutes countdown */
+        }
+
+        @keyframes countdown {
+            0% { content: "6:00"; }
+            16.67% { content: "5:59"; }
+            33.33% { content: "5:58"; }
+            50% { content: "5:57"; }
+            66.67% { content: "5:56"; }
+            83.33% { content: "5:55"; }
+            100% { content: "5:54"; }
+        }
+@media only screen and (max-width: 480px) {
+            .email-container {
+                padding: 15px;
+            }
+            .header {
+                font-size: 20px;
+            }
+            .input-container {
+                font-size: 16px;
+                padding: 10px;
+            }
+            .button {
+                font-size: 14px;
+                padding: 10px 15px;
+            }
+            .sub-text {
+                font-size: 13px;
+            }
+            .footer {
+                font-size: 12px;
+            }
+            .regards {
+                font-size: 14px;
+            }
+            .address {
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <p>Dear User,</p>
-  <p>Your OTP code is: <span class="otp">{{otp}}</span></p>
-  <p>This code is valid for 6 minutes. Do not share it with anyone.</p>
-  <p>Thank you!</p>
+    <div class="email-container">
+        <div class="header">KL SURABHI 2025: Verify Your Registration</div>
+        <div class="input-container">Your OTP: <strong style="color: #cd8f53;" id="otp">[OTP]</strong></div>
+        <p class="sub-text">This OTP is valid for the next <span class="timer">6:00</span> minutes.</p>
+        <p class="sub-text">If you have any questions or issues, feel free to contact us.</p>
+        <a href="mailto:surabhi@kluniversity.in" class="button">Contact Support</a>
+        <div class="regards">
+            Warm Regards,<br>
+            KL SURABHI Team 2025
+        </div>
+        <div class="address">
+            <strong>KL University</strong><br>
+            KLEF Deemed to be University,<br>
+            Green Fields, Vaddeswaram,<br>
+            Guntur District, Andhra Pradesh, INDIA.<br>
+            Pincode: 522 302.
+        </div>
+    </div>
 </body>
 </html>

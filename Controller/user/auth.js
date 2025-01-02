@@ -22,7 +22,7 @@ async function sendOtpRegistration(req,res) {
 
       throw new Error("Could not send mail.");
     }catch(err){
-      return res.json({code:0,message:err});
+      return res.json({code:0,message:err.message});
     }
 
   }).catch(err=>{
@@ -30,6 +30,24 @@ async function sendOtpRegistration(req,res) {
   });
 }
 
+async function VerifyOtp(req,res) {
+
+  const {email,otp}=req.body;
+
+    try{
+      const verifed=await logic.verifyOtp(email,otp);
+
+      if(verifed){
+        return res.json({code:1,message:"Email Verifed."});
+      }
+
+      return res.json({code:0,message:"Incorrect OTP."});
+    }catch(err){
+      return res.json({code:-1,message:err.message});
+    }
+}
+
 module.exports={
   sendOtpRegistration,
+  VerifyOtp,
 }

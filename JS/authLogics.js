@@ -48,8 +48,52 @@ async function deleteOtp(email) {
   }
 }
 
+async function verifyOtp(email,otp) {
+
+  if(!email || typeof email!=="string" || !otp || typeof otp!=="string"){
+    throw new Error("Email is required.");
+  }
+
+  const conn=await database.getConnection();
+
+  try{
+    const query = `SELECT otp_code from otp_table where email=? and created_at >=NOW() - INTERVAL 6 MINUTE ORDER BY created_at DESC LIMIT 1`;
+
+    const [rows]=await conn.query(query,[email]);
+
+    if (rows.length===0) {
+      throw new Error("Not found");
+    }
+
+    const {otp_code} = rows[0];
+    if(otp_code==otp){
+
+      try{
+        await deleteOtp(email);
+      }catch(err){
+        
+      }
+
+      return true;
+    }
+
+    return false;
+
+  }catch(err){
+
+    if(err.message==="Not found" || err.message==="OTP Expired"){
+      throw err;
+    }
+
+    throw new Error("Failed to verify OTP.");
+  }finally{
+    conn.release();
+  }
+}
+
 module.exports={
   checkUserPresence,
   saveOTP,
   deleteOtp,
+  verifyOtp
 }
