@@ -108,10 +108,54 @@ async function storeToken(email) {
   }
 }
 
+async function deleteToken(token) {
+
+  const conn=await database.getConnection();
+
+  try{
+    await conn.query("delete from registerToken where token =?",[token]);
+    return true;
+  }catch(err){
+    return false;
+  }
+  
+}
+
+async function verifyToken(token,email) {
+  const conn=await database.getConnection();
+
+  try{
+      const [result]=await conn.query("select email from registerToken where token=? and created_at >=NOW() - INTERVAL 30 MINUTE ORDER BY created_at DESC LIMIT 1",[token]);
+
+      if(result.length===0){
+        throw new Error("Token Expired or not found.");
+      }
+
+      const {emailData}=result[0];
+
+      if(emailData!=email){
+        throw new Error("Email does not match with Token details.");
+      }
+
+      return true;
+
+  }catch(err){
+    if(err.message=="Token Expired or not found" || err.message=="Email does not match with Token details."){
+      throw err;
+    }
+
+    throw new Error("Failed to verify token. Please try again.");
+  }finally{
+    conn.release();
+  }
+}
+
 module.exports={
   checkUserPresence,
   saveOTP,
   deleteOtp,
   verifyOtp,
   storeToken,
+  verifyToken,
+  deleteToken,
 }
