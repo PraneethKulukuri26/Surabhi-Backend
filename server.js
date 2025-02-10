@@ -28,6 +28,23 @@ app.listen(port,()=>{
 const userAuth=require("./Route/user/auth");
 app.use("/api/user/",userAuth);
 
+const adminAuth=require("./Route/admin/auth");
+app.use("/api/admin/",adminAuth);
+
+const fs = require('fs').promises;
+
+async function readJSON() {
+    try {
+        const rawData = await fs.readFile('public/EventsData/data.json', 'utf8');
+        const data = JSON.parse(rawData);
+        console.log(data.name);
+    } catch(error){
+        console.error('Error reading file:', error);
+    }
+}
+
+//readJSON();
+
 app.get("/test",(req,res)=>{
   for(let i=0;i<10;i++){
 

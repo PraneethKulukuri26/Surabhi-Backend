@@ -1,5 +1,6 @@
 const database=require("../Config/database");
 const uuid=require("uuid");
+const jwt=require('jsonwebtoken');
 
 async function checkUserPresence(email) {
 
@@ -137,14 +138,76 @@ async function verifyToken(token,email) {
         throw new Error("Email does not match with Token details.");
       }
 
-      return true;
-
   }catch(err){
     if(err.message=="Token Expired or not found" || err.message=="Email does not match with Token details."){
       throw err;
     }
 
     throw new Error("Failed to verify token. Please try again.");
+  }finally{
+    conn.release();
+  }
+}
+
+async function registerUser(params,image=null) {
+  const { name, email, phone_number, profession, gender, id, password, college, college_name,trans_id, state } = params;
+
+  const conn = await database.getConnection();
+
+  try {
+    await conn.beginTransaction();
+
+    const query = `INSERT INTO SurabhiUsers (name, email, phone, profession, gender, CID, password, collage, collageName, state,transId,registeredOn) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,NOW())`;
+
+    const values = [name,email,phone_number,profession,gender,id,password,college,college_name,trans_id,state];
+
+    const [result] = await conn.execute(query, values);
+
+    if(college=='other'){
+      await image.mv('public/images/payment/'+result.insertId);
+    }
+
+    await conn.commit();
+  } catch (err) {
+    await conn.rollback();
+    console.error("Error registering user:", err);
+
+    throw err;
+
+  } finally {
+    conn.release();
+  }
+}
+
+async function loginUser(params) {
+  const {email,password}=params;
+
+  const conn=database.getConnection();
+
+  try{
+    const [rows] = await conn.query("SELECT UID, password FROM SurabhiUsers WHERE email = ?",[email]);
+
+    if (rows.length === 0) {
+      throw new Error("Email not found.");
+    }
+    const user = rows[0];
+    if (user.password !== password) {
+      throw new Error("Invalid password.");
+    }
+
+    const token=jwt.sign({
+      userId:user.UID,
+      role:'user',
+      email:email
+    },process.env.SECRET_KEY,{
+      algorithm: "HS512",
+      expiresIn: "1d",
+    });
+
+    return token;
+
+  }catch(err){
+    throw err;
   }finally{
     conn.release();
   }
@@ -158,4 +221,6 @@ module.exports={
   storeToken,
   verifyToken,
   deleteToken,
+  registerUser,
+  loginUser,
 }
